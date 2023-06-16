@@ -28,6 +28,14 @@ export class UsersService {
     }
   }
 
+  async findOne(username: string): Promise<User | undefined | any> {
+    return await this.userRepository.findOne({
+      where: {
+        username: username,
+      },
+    });
+  }
+
   async create(createUserDto: CreateUserDto): Promise<User | any> {
     if (await this.findByEmailCreate(createUserDto.email)) {
       throw new BadRequestException({
