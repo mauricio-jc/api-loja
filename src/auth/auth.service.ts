@@ -1,8 +1,8 @@
-import { Injectable } from '@nestjs/common';
-import { User } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
+import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { User } from 'src/users/entities/user.entity';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class AuthService {
@@ -14,28 +14,47 @@ export class AuthService {
   async validateUser(username: string, password: string): Promise<User | any> {
     const user = await this.usersService.findOne(username);
 
-    if (user !== null) {
-      const isMatch = await bcrypt.compare(password, user.password);
-
-      if (isMatch) {
-        const { password, ...result } = user;
-        return result;
-      }
+    if (user && (await bcrypt.compare(password, user.password))) {
+      const { password, ...result } = user;
+      return result;
     }
 
     return null;
   }
 
+  // async loginRequest(body: any): Promise<void> {
+  //   if (
+  //     !body.hasOwnProperty('username') ||
+  //     body.username === null ||
+  //     body.username === ''
+  //   ) {
+  //     throw new BadRequestException({
+  //       statusCode: HttpStatus.BAD_REQUEST,
+  //       message: 'Preencha o campo usuário',
+  //     });
+  //   }
+
+  //   if (
+  //     !body.hasOwnProperty('password') ||
+  //     body.password === null ||
+  //     body.password === ''
+  //   ) {
+  //     throw new BadRequestException({
+  //       statusCode: HttpStatus.BAD_REQUEST,
+  //       message: 'Preencha o campo senha',
+  //     });
+  //   }
+  // }
+
   async login(user: any): Promise<any> {
     const payload = {
       name: user.name,
-      email: user.email,
       username: user.username,
+      email: user.email,
       sub: user.id,
     };
 
     return {
-      username: user.username,
       access_token: this.jwtService.sign(payload),
     };
   }
