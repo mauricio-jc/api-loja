@@ -23,7 +23,7 @@ export class UsersService {
     } catch (error) {
       throw new InternalServerErrorException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Falha na requisição.',
+        message: 'Falha na requisição',
         error: error.name,
       });
     }
@@ -38,7 +38,7 @@ export class UsersService {
       if (error.response.statusCode == 400) {
         throw new BadRequestException({
           statusCode: HttpStatus.BAD_REQUEST,
-          message: 'Falha na requisição.',
+          message: 'Falha na requisição',
           error: error.name,
         });
       }
@@ -53,7 +53,7 @@ export class UsersService {
 
       throw new InternalServerErrorException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Falha na requisição.',
+        message: 'Falha na requisição',
         error: error.name,
       });
     }
@@ -72,7 +72,7 @@ export class UsersService {
       if (error.response.statusCode == 400) {
         throw new BadRequestException({
           statusCode: HttpStatus.BAD_REQUEST,
-          message: 'Falha na requisição.',
+          message: 'Falha na requisição',
           error: error.name,
         });
       }
@@ -87,7 +87,7 @@ export class UsersService {
 
       throw new InternalServerErrorException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Falha na requisição.',
+        message: 'Falha na requisição',
         error: error.name,
       });
     }
@@ -105,14 +105,14 @@ export class UsersService {
       if (error.response.statusCode == 400) {
         throw new BadRequestException({
           statusCode: HttpStatus.BAD_REQUEST,
-          message: 'E-mail já cadastrado no banco de dados.',
-          error: 'Bad Request',
+          message: 'E-mail já cadastrado no banco de dados',
+          error: error.name,
         });
       }
 
       throw new InternalServerErrorException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Problemas ao cadastrar o usuário.',
+        message: 'Problemas ao cadastrar o usuário',
         error: error.message,
       });
     }
@@ -134,7 +134,7 @@ export class UsersService {
     } catch (error) {
       throw new InternalServerErrorException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Problemas ao cadastrar o usuário.',
+        message: 'Problemas ao cadastrar o usuário',
         error: error.message,
       });
     }
