@@ -94,19 +94,22 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto): Promise<User | any> {
-    if (await this.findByEmailCreate(createUserDto.email)) {
-      throw new BadRequestException({
-        statusCode: HttpStatus.BAD_REQUEST,
-        message: 'E-mail já cadastrado no banco de dados.',
-        error: 'Bad Request',
-      });
-    }
-
     try {
+      if (await this.findByEmailCreate(createUserDto.email)) {
+        throw new BadRequestException();
+      }
       createUserDto.password = await bcrypt.hash(createUserDto.password, 10);
       const userCreated = this.userRepository.save(createUserDto);
       return userCreated;
     } catch (error) {
+      if (error.response.statusCode == 400) {
+        throw new BadRequestException({
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'E-mail já cadastrado no banco de dados.',
+          error: 'Bad Request',
+        });
+      }
+
       throw new InternalServerErrorException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'Problemas ao cadastrar o usuário.',
