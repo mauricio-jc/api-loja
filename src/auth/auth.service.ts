@@ -1,4 +1,4 @@
-import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'src/users/entities/user.entity';
@@ -22,34 +22,8 @@ export class AuthService {
     return null;
   }
 
-  // async loginRequest(body: any): Promise<void> {
-  //   if (
-  //     !body.hasOwnProperty('username') ||
-  //     body.username === null ||
-  //     body.username === ''
-  //   ) {
-  //     throw new BadRequestException({
-  //       statusCode: HttpStatus.BAD_REQUEST,
-  //       message: 'Preencha o campo usuário',
-  //     });
-  //   }
-
-  //   if (
-  //     !body.hasOwnProperty('password') ||
-  //     body.password === null ||
-  //     body.password === ''
-  //   ) {
-  //     throw new BadRequestException({
-  //       statusCode: HttpStatus.BAD_REQUEST,
-  //       message: 'Preencha o campo senha',
-  //     });
-  //   }
-  // }
-
   async login(user: any): Promise<any> {
     const payload = {
-      name: user.name,
-      username: user.username,
       email: user.email,
       sub: user.id,
     };
