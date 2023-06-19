@@ -3,6 +3,7 @@ import {
   HttpStatus,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
@@ -22,18 +23,74 @@ export class UsersService {
     } catch (error) {
       throw new InternalServerErrorException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Problemas ao buscar os usuários.',
-        error: error.message,
+        message: 'Falha na requisição.',
+        error: error.name,
       });
     }
   }
 
-  async findOne(username: string): Promise<User | undefined | any> {
-    return await this.userRepository.findOne({
-      where: {
-        username: username,
-      },
-    });
+  async findOneById(id: number): Promise<User | undefined | any> {
+    try {
+      const user = await this.userRepository.findOneBy({ id });
+      if (!user) throw new NotFoundException();
+      return user;
+    } catch (error) {
+      if (error.response.statusCode == 400) {
+        throw new BadRequestException({
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Falha na requisição.',
+          error: error.name,
+        });
+      }
+
+      if (error.response.statusCode == 404) {
+        throw new NotFoundException({
+          statusCode: HttpStatus.NOT_FOUND,
+          message: 'Usuário não encontrado',
+          error: error.name,
+        });
+      }
+
+      throw new InternalServerErrorException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Falha na requisição.',
+        error: error.name,
+      });
+    }
+  }
+
+  async findOneByUsername(username: string): Promise<User | undefined | any> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: {
+          username: username,
+        },
+      });
+      if (!user) throw new NotFoundException();
+      return user;
+    } catch (error) {
+      if (error.response.statusCode == 400) {
+        throw new BadRequestException({
+          statusCode: HttpStatus.BAD_REQUEST,
+          message: 'Falha na requisição.',
+          error: error.name,
+        });
+      }
+
+      if (error.response.statusCode == 404) {
+        throw new NotFoundException({
+          statusCode: HttpStatus.NOT_FOUND,
+          message: 'Usuário não encontrado',
+          error: error.name,
+        });
+      }
+
+      throw new InternalServerErrorException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Falha na requisição.',
+        error: error.name,
+      });
+    }
   }
 
   async create(createUserDto: CreateUserDto): Promise<User | any> {
