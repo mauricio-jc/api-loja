@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Category } from './entities/Category.entity';
+import { Category } from './entities/category.entity';
 import { Not, Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
 
@@ -17,9 +17,9 @@ export class CategoriesService {
     private categoryRepository: Repository<Category>,
   ) {}
 
-  async all(): Promise<Category | any> {
+  async all(): Promise<Category[] | any> {
     try {
-      return this.categoryRepository.find();
+      return await this.categoryRepository.find();
     } catch (error) {
       throw new InternalServerErrorException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
@@ -102,7 +102,7 @@ export class CategoriesService {
         throw new BadRequestException();
       }
 
-      return this.categoryRepository.save(createCategoryDto);
+      return await this.categoryRepository.save(createCategoryDto);
     } catch (error) {
       if (error.response.statusCode == 400) {
         throw new BadRequestException({
