@@ -141,7 +141,7 @@ export class CategoriesService {
 
       throw new InternalServerErrorException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Problemas ao cadastrar o usuário',
+        message: 'Problemas ao cadastrar a categoria',
         error: error.message,
       });
     }

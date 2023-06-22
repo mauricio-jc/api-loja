@@ -35,7 +35,7 @@ export class ProductsService {
       if (!product) throw new NotFoundException();
       return product;
     } catch (error) {
-      if (error.respose.statusCode == 404) {
+      if (error.response.statusCode == 404) {
         throw new NotFoundException({
           statusCode: HttpStatus.NOT_FOUND,
           message: 'Produto não encontrado',
@@ -56,18 +56,59 @@ export class ProductsService {
       const category = await this.categoriesService.findOneById(
         createProductDto.category_id,
       );
-      const product = new Product();
-      product.name = createProductDto.name;
-      product.price = createProductDto.price;
-      product.quantity = createProductDto.quantity;
-      product.description = createProductDto.description;
-      product.category = category;
+
+      const product = this.productRepository.create({
+        ...createProductDto,
+        category: category,
+      });
+      // const product = new Product();
+      // product.name = createProductDto.name;
+      // product.price = createProductDto.price;
+      // product.quantity = createProductDto.quantity;
+      // product.description = createProductDto.description;
+      // product.category = category;
 
       return await this.productRepository.save(product);
     } catch (error) {
       throw new InternalServerErrorException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'Problemas ao cadastrar produto',
+        error: error,
+      });
+    }
+  }
+
+  async update(
+    id: number,
+    createProductDto: CreateProductDto,
+  ): Promise<Product | any> {
+    try {
+      const category = await this.categoriesService.findOneById(
+        createProductDto.category_id,
+      );
+
+      const product = this.productRepository.create({
+        ...createProductDto,
+        category: category,
+      });
+
+      return await this.productRepository.update(id, product);
+    } catch (error) {
+      throw new InternalServerErrorException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Problemas ao atualizar produto',
+        error: error,
+      });
+    }
+  }
+
+  async delete(id: number): Promise<Product | any> {
+    try {
+      return await this.productRepository.delete(id);
+    } catch (error) {
+      throw new InternalServerErrorException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Problemas ao excluir produto',
         error: error,
       });
     }
