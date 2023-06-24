@@ -17,19 +17,19 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 export class CategoriesController {
   constructor(private categoriesService: CategoriesService) {}
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get()
   async listAll(): Promise<Category[] | any> {
     return await this.categoriesService.all();
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get(':id')
   async find(@Param('id') id: string): Promise<Category | any> {
     return await this.categoriesService.findOneById(Number(id));
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Post('create')
   async createCategory(
     @Body() createCategoryDto: CreateCategoryDto,
@@ -37,7 +37,7 @@ export class CategoriesController {
     return await this.categoriesService.create(createCategoryDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Put('edit/:id')
   async updateCategory(
     @Param('id') id: string,
@@ -46,7 +46,7 @@ export class CategoriesController {
     return await this.categoriesService.update(Number(id), createCategoryDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Delete('delete/:id')
   async deleteCategory(@Param('id') id: string): Promise<Category | any> {
     return await this.categoriesService.delete(Number(id));
