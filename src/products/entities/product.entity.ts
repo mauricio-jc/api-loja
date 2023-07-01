@@ -30,6 +30,9 @@ export class Product {
   @Column({ type: 'text' })
   description: string;
 
+  @Column({ name: 'image', type: 'varchar', length: 255, nullable: false })
+  image: string;
+
   @CreateDateColumn({ name: 'created_at', nullable: true })
   createdAt: Date;
 
