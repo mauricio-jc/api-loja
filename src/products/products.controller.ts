@@ -7,11 +7,21 @@ import {
   Body,
   Put,
   Delete,
+  UseInterceptors,
+  UploadedFile,
+  ParseFilePipe,
+  BadRequestException,
+  Req,
+  ParseFilePipeBuilder,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateProductDto } from './dto/create-product.dto';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Helper } from 'src/helpers/Helper';
 
 @Controller('products')
 export class ProductsController {
@@ -30,10 +40,24 @@ export class ProductsController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(FileInterceptor('image', Helper.storageFile()))
   @Post('create')
   async createProduct(
+    @Req() req,
     @Body() createProductDto: CreateProductDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        fileIsRequired: true,
+      }),
+    )
+    file: Express.Multer.File,
   ): Promise<Product | any> {
+    if (req.fileValidationError) {
+      throw new BadRequestException(
+        'Only images are allowed',
+        'Bad request. Accepted file extensions are:',
+      );
+    }
     return await this.productsService.create(createProductDto);
   }
 
