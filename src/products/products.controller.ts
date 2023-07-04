@@ -12,6 +12,8 @@ import {
   BadRequestException,
   Req,
   Res,
+  ParseFilePipeBuilder,
+  HttpStatus,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
@@ -52,39 +54,40 @@ export class ProductsController {
   @Post('create')
   async createProduct(
     @Body() createProductDto: CreateProductDto,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile(
+      new ParseFilePipeBuilder().build({
+        fileIsRequired: true,
+        exceptionFactory() {
+          throw new BadRequestException('Selecione a imagem');
+        },
+      }),
+    )
+    file: Express.Multer.File,
   ): Promise<Product | any> {
-    if (!file) {
-      throw new BadRequestException('Imagem inválida!');
-    } else {
-      return await this.productsService.create(file, createProductDto);
-    }
+    return await this.productsService.create(file, createProductDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(
-    FileInterceptor('image', Helper.updateFile('./public/images/products')),
+    FileInterceptor('image', Helper.storageFile('./public/images/products')),
   )
   @Put('edit/:id')
   async updateProduct(
     @Param('id') id: string,
     @Body() createProductDto: CreateProductDto,
-    @UploadedFile() file: Express.Multer.File,
+    @UploadedFile()
+    file: Express.Multer.File,
   ): Promise<Product | any> {
-    // let image = null;
+    let image = null;
     if (file) {
-      console.log(file);
-      // image = file;
-      return {
-        filePath: file.originalname,
-      };
+      image = file;
     }
 
-    // return await this.productsService.update(
-    //   Number(id),
-    //   createProductDto,
-    //   image,
-    // );
+    return await this.productsService.update(
+      Number(id),
+      createProductDto,
+      image,
+    );
   }
 
   @UseGuards(JwtAuthGuard)
