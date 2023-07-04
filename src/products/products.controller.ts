@@ -10,10 +10,8 @@ import {
   UseInterceptors,
   UploadedFile,
   BadRequestException,
-  Req,
   Res,
   ParseFilePipeBuilder,
-  HttpStatus,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
