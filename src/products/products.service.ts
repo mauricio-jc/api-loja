@@ -51,7 +51,10 @@ export class ProductsService {
     }
   }
 
-  async create(createProductDto: CreateProductDto): Promise<Product | any> {
+  async create(
+    file: Express.Multer.File,
+    createProductDto: CreateProductDto,
+  ): Promise<Product | any> {
     try {
       const category = await this.categoriesService.findOneById(
         createProductDto.category_id,
@@ -60,13 +63,8 @@ export class ProductsService {
       const product = this.productRepository.create({
         ...createProductDto,
         category: category,
+        image: file.filename,
       });
-      // const product = new Product();
-      // product.name = createProductDto.name;
-      // product.price = createProductDto.price;
-      // product.quantity = createProductDto.quantity;
-      // product.description = createProductDto.description;
-      // product.category = category;
 
       return await this.productRepository.save(product);
     } catch (error) {
