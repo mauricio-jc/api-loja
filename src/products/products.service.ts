@@ -9,6 +9,7 @@ import { Product } from './entities/product.entity';
 import { Repository } from 'typeorm';
 import { CreateProductDto } from './dto/create-product.dto';
 import { CategoriesService } from 'src/categories/categories.service';
+import { Helper } from 'src/helpers/Helper';
 
 @Injectable()
 export class ProductsService {
@@ -79,18 +80,28 @@ export class ProductsService {
   async update(
     id: number,
     createProductDto: CreateProductDto,
+    file: Express.Multer.File,
   ): Promise<Product | any> {
     try {
+      const product = await this.productRepository.findOneBy({ id });
+
       const category = await this.categoriesService.findOneById(
         createProductDto.category_id,
       );
 
-      const product = this.productRepository.create({
+      const updateProduct = this.productRepository.create({
         ...createProductDto,
         category: category,
       });
 
-      return await this.productRepository.update(id, product);
+      if (file !== null) {
+        if (product.image !== null && product.image !== '') {
+          await Helper.removeFile(`./public/images/products/${product.image}`);
+        }
+        updateProduct.image = file.filename;
+      }
+
+      return await this.productRepository.update(id, updateProduct);
     } catch (error) {
       throw new InternalServerErrorException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,

@@ -62,12 +62,29 @@ export class ProductsController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @UseInterceptors(
+    FileInterceptor('image', Helper.updateFile('./public/images/products')),
+  )
   @Put('edit/:id')
   async updateProduct(
     @Param('id') id: string,
     @Body() createProductDto: CreateProductDto,
+    @UploadedFile() file: Express.Multer.File,
   ): Promise<Product | any> {
-    return await this.productsService.update(Number(id), createProductDto);
+    // let image = null;
+    if (file) {
+      console.log(file);
+      // image = file;
+      return {
+        filePath: file.originalname,
+      };
+    }
+
+    // return await this.productsService.update(
+    //   Number(id),
+    //   createProductDto,
+    //   image,
+    // );
   }
 
   @UseGuards(JwtAuthGuard)
