@@ -53,7 +53,7 @@ export class ProductsService {
   }
 
   async create(
-    file: Express.Multer.File,
+    files: Express.Multer.File[],
     createProductDto: CreateProductDto,
   ): Promise<Product | any> {
     try {
@@ -64,8 +64,16 @@ export class ProductsService {
       const product = this.productRepository.create({
         ...createProductDto,
         category: category,
-        image: file.filename,
       });
+
+      for (let i = 1; i <= files.length; i++) {
+        if (i == 1) {
+          product.image1 = files[i - 1].filename;
+        }
+        if (i == 2) {
+          product.image2 = files[i - 1].filename;
+        }
+      }
 
       return await this.productRepository.save(product);
     } catch (error) {
@@ -80,7 +88,7 @@ export class ProductsService {
   async update(
     id: number,
     createProductDto: CreateProductDto,
-    file: Express.Multer.File,
+    files: Express.Multer.File[],
   ): Promise<Product | any> {
     try {
       const product = await this.productRepository.findOneBy({ id });
@@ -94,12 +102,30 @@ export class ProductsService {
         category: category,
       });
 
-      if (file !== null) {
-        if (product.image !== null && product.image !== '') {
-          await Helper.removeFile(`./public/images/products/${product.image}`);
+      if (files !== null) {
+        for (let i = 1; i <= files.length; i++) {
+          if (i == 1) {
+            if (product.image1 === null || product.image1 === '') {
+              updateProduct.image1 = files[i - 1].filename;
+            }
+            if (product.image2 === null || product.image2 === '') {
+              updateProduct.image2 = files[i - 1].filename;
+            }
+          }
+          if (i == 2) {
+            if (product.image2 === null || product.image2 === '') {
+              updateProduct.image2 = files[i - 1].filename;
+            }
+          }
         }
-        updateProduct.image = file.filename;
       }
+
+      // if (file !== null) {
+      //   if (product.image1 !== null && product.image1 !== '') {
+      //     await Helper.removeFile(`./public/images/products/${product.image1}`);
+      //   }
+      //   updateProduct.image1 = file.filename;
+      // }
 
       return await this.productRepository.update(id, updateProduct);
     } catch (error) {

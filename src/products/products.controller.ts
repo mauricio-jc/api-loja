@@ -12,12 +12,17 @@ import {
   BadRequestException,
   Res,
   ParseFilePipeBuilder,
+  UploadedFiles,
 } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateProductDto } from './dto/create-product.dto';
-import { FileInterceptor } from '@nestjs/platform-express';
+import {
+  FileFieldsInterceptor,
+  FileInterceptor,
+  FilesInterceptor,
+} from '@nestjs/platform-express';
 import { Helper } from 'src/helpers/Helper';
 
 @Controller('products')
@@ -47,44 +52,49 @@ export class ProductsController {
 
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(
-    FileInterceptor('image', Helper.storageFile('./public/images/products')),
+    FileFieldsInterceptor(
+      [{ name: 'images', maxCount: 4 }],
+      Helper.storageFile('./public/images/products'),
+    ),
   )
   @Post('create')
   async createProduct(
     @Body() createProductDto: CreateProductDto,
-    @UploadedFile(
+    @UploadedFiles(
       new ParseFilePipeBuilder().build({
         fileIsRequired: true,
         exceptionFactory() {
-          throw new BadRequestException('Selecione a imagem');
+          throw new BadRequestException('Selecione pelo menos uma imagem');
         },
       }),
     )
-    file: Express.Multer.File,
+    files: Express.Multer.File[],
   ): Promise<Product | any> {
-    return await this.productsService.create(file, createProductDto);
+    return await this.productsService.create(files['images'], createProductDto);
   }
 
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(
-    FileInterceptor('image', Helper.storageFile('./public/images/products')),
+    FileFieldsInterceptor(
+      [{ name: 'images', maxCount: 4 }],
+      Helper.storageFile('./public/images/products'),
+    ),
   )
   @Put('edit/:id')
   async updateProduct(
     @Param('id') id: string,
     @Body() createProductDto: CreateProductDto,
-    @UploadedFile()
-    file: Express.Multer.File,
+    @UploadedFiles() files: Express.Multer.File[],
   ): Promise<Product | any> {
-    let image = null;
-    if (file) {
-      image = file;
+    let images = null;
+    if (Object.keys(files).length > 0) {
+      console.log('aqui');
+      images = files['images'];
     }
-
     return await this.productsService.update(
       Number(id),
       createProductDto,
-      image,
+      images,
     );
   }
 
