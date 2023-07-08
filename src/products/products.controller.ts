@@ -88,7 +88,6 @@ export class ProductsController {
   ): Promise<Product | any> {
     let images = null;
     if (Object.keys(files).length > 0) {
-      console.log('aqui');
       images = files['images'];
     }
     return await this.productsService.update(
