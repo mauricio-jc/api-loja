@@ -8,7 +8,6 @@ import {
   Put,
   Delete,
   UseInterceptors,
-  UploadedFile,
   BadRequestException,
   Res,
   ParseFilePipeBuilder,
@@ -18,11 +17,7 @@ import { ProductsService } from './products.service';
 import { Product } from './entities/product.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateProductDto } from './dto/create-product.dto';
-import {
-  FileFieldsInterceptor,
-  FileInterceptor,
-  FilesInterceptor,
-} from '@nestjs/platform-express';
+import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { Helper } from 'src/helpers/Helper';
 
 @Controller('products')

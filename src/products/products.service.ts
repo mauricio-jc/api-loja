@@ -107,13 +107,20 @@ export class ProductsService {
           if (i == 1) {
             if (product.image1 === null || product.image1 === '') {
               updateProduct.image1 = files[i - 1].filename;
-            }
-            if (product.image2 === null || product.image2 === '') {
-              updateProduct.image2 = files[i - 1].filename;
+            } else {
+              await Helper.removeFile(
+                `./public/images/products/${product.image1}`,
+              );
+              updateProduct.image1 = files[i - 1].filename;
             }
           }
           if (i == 2) {
             if (product.image2 === null || product.image2 === '') {
+              updateProduct.image2 = files[i - 1].filename;
+            } else {
+              await Helper.removeFile(
+                `./public/images/products/${product.image2}`,
+              );
               updateProduct.image2 = files[i - 1].filename;
             }
           }
@@ -122,7 +129,6 @@ export class ProductsService {
 
       // if (file !== null) {
       //   if (product.image1 !== null && product.image1 !== '') {
-      //     await Helper.removeFile(`./public/images/products/${product.image1}`);
       //   }
       //   updateProduct.image1 = file.filename;
       // }
