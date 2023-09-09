@@ -36,7 +36,7 @@ export class ProductsController {
     return await this.productsService.find(Number(id));
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get('image/:filename')
   async getImage(
     @Param('filename') filename: string,

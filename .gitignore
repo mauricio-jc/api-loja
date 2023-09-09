@@ -37,3 +37,5 @@ lerna-debug.log*
 .env
 
 /src/auth/constants.ts
+
+/public

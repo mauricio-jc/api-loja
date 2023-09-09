@@ -19,7 +19,11 @@ export class CategoriesService {
 
   async all(): Promise<Category[] | any> {
     try {
-      return await this.categoryRepository.find();
+      return await this.categoryRepository.find({
+        order: {
+          name: 'ASC',
+        },
+      });
     } catch (error) {
       throw new InternalServerErrorException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
