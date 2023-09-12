@@ -103,26 +103,35 @@ export class ProductsService {
       });
 
       if (files !== null) {
-        for (let i = 1; i <= files.length; i++) {
-          if (i == 1) {
-            if (product.image1 === null || product.image1 === '') {
-              updateProduct.image1 = files[i - 1].filename;
-            } else {
-              await Helper.removeFile(
-                `./public/images/products/${product.image1}`,
-              );
-              updateProduct.image1 = files[i - 1].filename;
-            }
+        if (createProductDto.change_image1 == 'change') {
+          if (product.image1 != null && product.image1 != '') {
+            await Helper.removeFile(
+              `./public/images/products/${product.image1}`,
+            );
           }
-          if (i == 2) {
-            if (product.image2 === null || product.image2 === '') {
-              updateProduct.image2 = files[i - 1].filename;
-            } else {
-              await Helper.removeFile(
-                `./public/images/products/${product.image2}`,
-              );
-              updateProduct.image2 = files[i - 1].filename;
-            }
+
+          if (files.length == 1) {
+            updateProduct.image1 = files[0].filename;
+          }
+
+          if (files.length == 2) {
+            updateProduct.image1 = files[1].filename;
+          }
+        }
+
+        if (createProductDto.change_image2 == 'change') {
+          if (product.image2 != null && product.image2 != '') {
+            await Helper.removeFile(
+              `./public/images/products/${product.image2}`,
+            );
+          }
+
+          if (files.length == 1) {
+            updateProduct.image2 = files[0].filename;
+          }
+
+          if (files.length == 2) {
+            updateProduct.image2 = files[1].filename;
           }
         }
       }

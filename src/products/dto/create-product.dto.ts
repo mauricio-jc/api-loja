@@ -2,6 +2,7 @@ import {
   IsInt,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsPositive,
   IsString,
   Min,
@@ -64,4 +65,10 @@ export class CreateProductDto {
     message: 'Informe a categoria',
   })
   category_id: number;
+
+  @IsOptional()
+  change_image1?: string;
+
+  @IsOptional()
+  change_image2?: string;
 }
