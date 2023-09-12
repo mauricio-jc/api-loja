@@ -154,6 +154,16 @@ export class ProductsService {
 
   async delete(id: number): Promise<Product | any> {
     try {
+      const product = await this.productRepository.findOneBy({ id });
+
+      if (product.image1 != null && product.image1 != '') {
+        await Helper.removeFile(`./public/images/products/${product.image1}`);
+      }
+
+      if (product.image2 != null && product.image2 != '') {
+        await Helper.removeFile(`./public/images/products/${product.image2}`);
+      }
+
       return await this.productRepository.delete(id);
     } catch (error) {
       throw new InternalServerErrorException({
