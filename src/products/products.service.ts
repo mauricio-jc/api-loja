@@ -1,8 +1,10 @@
 import {
   HttpStatus,
+  Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from './entities/product.entity';
@@ -15,6 +17,7 @@ import { Helper } from 'src/helpers/Helper';
 export class ProductsService {
   constructor(
     @InjectRepository(Product) private productRepository: Repository<Product>,
+    @Inject(forwardRef(() => CategoriesService))
     private categoriesService: CategoriesService,
   ) {}
 
@@ -172,5 +175,15 @@ export class ProductsService {
         error: error,
       });
     }
+  }
+
+  async findByCategorie(categoryId: number): Promise<Product[] | any> {
+    return await this.productRepository.find({
+      where: {
+        category: {
+          id: categoryId,
+        },
+      },
+    });
   }
 }

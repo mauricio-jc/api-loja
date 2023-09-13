@@ -1,20 +1,25 @@
 import {
   BadRequestException,
   HttpStatus,
+  Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
 import { Not, Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import { ProductsService } from 'src/products/products.service';
 
 @Injectable()
 export class CategoriesService {
   constructor(
     @InjectRepository(Category)
     private categoryRepository: Repository<Category>,
+    @Inject(forwardRef(() => ProductsService))
+    private productsService: ProductsService,
   ) {}
 
   async all(): Promise<Category[] | any> {
@@ -153,8 +158,23 @@ export class CategoriesService {
 
   async delete(id: number): Promise<Category | any> {
     try {
-      return await this.categoryRepository.delete(id);
+      const products = await this.productsService.findByCategorie(id);
+
+      if (products.length > 0) {
+        throw new BadRequestException();
+      } else {
+        return await this.categoryRepository.delete(id);
+      }
     } catch (error) {
+      if (error.response.statusCode == 400) {
+        throw new BadRequestException({
+          statusCode: HttpStatus.BAD_REQUEST,
+          message:
+            'Esta categoria não pode ser excluída pois está vinculada a um produto',
+          error: error.name,
+        });
+      }
+
       throw new InternalServerErrorException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
         message: 'Problemas ao excluir a categoria',
