@@ -38,4 +38,4 @@ lerna-debug.log*
 
 /src/auth/constants.ts
 
-/public
+/public/images/products/*
