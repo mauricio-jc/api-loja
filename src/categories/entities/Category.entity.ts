@@ -14,7 +14,7 @@ export class Category {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 255, nullable: false })
+  @Column({ nullable: false })
   @Generated('uuid')
   uuid: string;
 
