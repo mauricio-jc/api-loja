@@ -36,6 +36,6 @@ lerna-debug.log*
 
 .env
 
-/src/auth/constants.ts
+#/src/auth/constants.ts
 
-/public/images/products/*
+#/public/images/products/*
