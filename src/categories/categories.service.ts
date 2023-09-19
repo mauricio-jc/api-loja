@@ -8,7 +8,7 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Category } from '../categories/entities/category.entity';
+import { Category } from './entities/category.entity';
 import { Not, Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { ProductsService } from 'src/products/products.service';
