@@ -2,7 +2,7 @@ import { Module, forwardRef } from '@nestjs/common';
 import { CategoriesController } from './categories.controller';
 import { CategoriesService } from './categories.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Category } from './entities/category.entity';
+import { Category } from '../categories/entities/category.entity';
 import { ProductsModule } from 'src/products/products.module';
 import { ProductsService } from 'src/products/products.service';
 import { Product } from 'src/products/entities/product.entity';
