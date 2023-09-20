@@ -23,7 +23,11 @@ export class ProductsService {
 
   async all(): Promise<Product[] | any> {
     try {
-      return await this.productRepository.find();
+      return await this.productRepository.find({
+        order: {
+          id: 'DESC',
+        },
+      });
     } catch (error) {
       throw new InternalServerErrorException({
         statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
