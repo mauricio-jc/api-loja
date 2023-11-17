@@ -8,6 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeormConfigService } from './config/typeorm.config.service';
 import { AuthModule } from './auth/auth.module';
+import { ClientsModule } from './clients/clients.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 
 @Module({
@@ -21,6 +22,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
     CategoriesModule,
     ProductsModule,
     AuthModule,
+    ClientsModule,
   ],
   controllers: [AppController],
   providers: [
