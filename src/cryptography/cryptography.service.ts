@@ -4,55 +4,12 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class CryptographyService {
-  // initVector = randomBytes(16);
-
-  // key = createHash('sha512')
-  //   .update(this.configService.get<string>('SECRET_KEY'))
-  //   .digest('hex')
-  //   .substring(0, 32);
   initVector = createHash('sha512')
     .update(this.configService.get<string>('SECRET_KEY'))
     .digest('hex')
     .substring(0, 16);
 
   constructor(private configService: ConfigService) {}
-
-  // encrypt(request: any): any {
-  //   const cipher = createCipheriv(
-  //     'aes256',
-  //     this.configService.get<string>('SECRET_KEY'),
-  //     this.initVector,
-  //   );
-  //   let passwordCrypt = cipher.update(request.password, 'utf-8', 'hex');
-  //   passwordCrypt += cipher.final('hex');
-  //   console.log(this.initVector);
-
-  //   return {
-  //     passwordCrypt: passwordCrypt,
-  //     password: request.password,
-  //   };
-  // }
-
-  // decrypt(request: any): any {
-  //   const decipher = createDecipheriv(
-  //     'aes256',
-  //     this.configService.get<string>('SECRET_KEY'),
-  //     this.initVector,
-  //   );
-
-  //   let passwordDecrypt = decipher.update(
-  //     request.passwordCrypt,
-  //     'hex',
-  //     'utf-8',
-  //   );
-
-  //   passwordDecrypt += decipher.final('utf8');
-
-  //   return {
-  //     passwordCrypt: request.passwordCrypt,
-  //     passwordDecrypt: passwordDecrypt,
-  //   };
-  // }
 
   encrypt(request: any) {
     const cipher = createCipheriv(

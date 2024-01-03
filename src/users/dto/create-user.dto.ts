@@ -45,4 +45,7 @@ export class CreateUserDto {
     toPlainOnly: true,
   })
   password: string;
+
+  @IsNotEmpty()
+  roles: string[];
 }

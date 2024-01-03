@@ -12,24 +12,27 @@ import { CategoriesService } from './categories.service';
 import { Category } from './entities/category.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateCategoryDto } from './dto/create-category.dto';
+import { Roles } from '../acls/roles.decorator';
+import { Role } from 'src/acls/role.enum';
+import { RolesGuard } from 'src/acls/roles.guard';
 
 @Controller('categories')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class CategoriesController {
   constructor(private categoriesService: CategoriesService) {}
 
-  @UseGuards(JwtAuthGuard)
   @Get()
+  @Roles(Role.Admin)
   async listAll(): Promise<Category[] | any> {
     return await this.categoriesService.all();
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
+  @Roles(Role.Admin)
   async find(@Param('id') id: string): Promise<Category | any> {
     return await this.categoriesService.findOneById(Number(id));
   }
 
-  @UseGuards(JwtAuthGuard)
   @Post('create')
   async createCategory(
     @Body() createCategoryDto: CreateCategoryDto,
@@ -37,7 +40,6 @@ export class CategoriesController {
     return await this.categoriesService.create(createCategoryDto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Put('edit/:id')
   async updateCategory(
     @Param('id') id: string,
@@ -46,7 +48,6 @@ export class CategoriesController {
     return await this.categoriesService.update(Number(id), createCategoryDto);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Delete('delete/:id')
   async deleteCategory(@Param('id') id: string): Promise<Category | any> {
     return await this.categoriesService.delete(Number(id));

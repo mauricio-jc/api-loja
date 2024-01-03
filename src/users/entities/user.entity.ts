@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { Role } from 'src/acls/role.enum';
 import {
   Column,
   CreateDateColumn,
@@ -31,6 +32,9 @@ export class User {
   })
   @Column({ name: 'password', type: 'varchar', length: 255, nullable: false })
   password: string;
+
+  @Column({ name: 'roles', type: 'json', nullable: true })
+  roles: string[];
 
   @CreateDateColumn({ name: 'created_at', nullable: true })
   createdAt: Date;
