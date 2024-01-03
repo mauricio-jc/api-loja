@@ -46,6 +46,8 @@ export class CreateUserDto {
   })
   password: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({
+    message: 'Informe as regras.',
+  })
   roles: string[];
 }

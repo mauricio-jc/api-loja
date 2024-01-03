@@ -12,8 +12,8 @@ import { CategoriesService } from './categories.service';
 import { Category } from './entities/category.entity';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { Roles } from '../acls/roles.decorator';
-import { Role } from 'src/acls/role.enum';
+import { Actions } from '../acls/actions.decorator';
+import { Action } from 'src/acls/action.enum';
 import { RolesGuard } from 'src/acls/roles.guard';
 
 @Controller('categories')
@@ -22,18 +22,19 @@ export class CategoriesController {
   constructor(private categoriesService: CategoriesService) {}
 
   @Get()
-  @Roles(Role.Admin)
+  @Actions(Action.ListCategories)
   async listAll(): Promise<Category[] | any> {
     return await this.categoriesService.all();
   }
 
   @Get(':id')
-  @Roles(Role.Admin)
+  @Actions(Action.ListCategories)
   async find(@Param('id') id: string): Promise<Category | any> {
     return await this.categoriesService.findOneById(Number(id));
   }
 
   @Post('create')
+  @Actions(Action.CreateCategory)
   async createCategory(
     @Body() createCategoryDto: CreateCategoryDto,
   ): Promise<Category | any> {
@@ -41,6 +42,7 @@ export class CategoriesController {
   }
 
   @Put('edit/:id')
+  @Actions(Action.UpdateCategory)
   async updateCategory(
     @Param('id') id: string,
     @Body() createCategoryDto: CreateCategoryDto,
@@ -49,6 +51,7 @@ export class CategoriesController {
   }
 
   @Delete('delete/:id')
+  @Actions(Action.DeleteCategory)
   async deleteCategory(@Param('id') id: string): Promise<Category | any> {
     return await this.categoriesService.delete(Number(id));
   }

@@ -1,11 +1,10 @@
 import { Exclude } from 'class-transformer';
-import { Role } from 'src/acls/role.enum';
 import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Generated,
   Column,
   CreateDateColumn,
-  Entity,
-  Generated,
-  PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 
@@ -33,7 +32,7 @@ export class User {
   @Column({ name: 'password', type: 'varchar', length: 255, nullable: false })
   password: string;
 
-  @Column({ name: 'roles', type: 'json', nullable: true })
+  @Column({ name: 'roles', type: 'json', nullable: false })
   roles: string[];
 
   @CreateDateColumn({ name: 'created_at', nullable: true })
