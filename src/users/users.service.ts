@@ -139,4 +139,21 @@ export class UsersService {
       });
     }
   }
+
+  async getRoles(id: number): Promise<any> {
+    try {
+      return await this.userRepository.findOne({
+        where: {
+          id: id,
+        },
+        select: ['roles'],
+      });
+    } catch (error) {
+      throw new InternalServerErrorException({
+        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
+        message: 'Falha na requisição',
+        error: error.message,
+      });
+    }
+  }
 }
