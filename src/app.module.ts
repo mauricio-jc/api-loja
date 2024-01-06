@@ -9,9 +9,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeormConfigService } from './config/typeorm.config.service';
 import { AuthModule } from './auth/auth.module';
 import { ClientsModule } from './clients/clients.module';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CryptographyModule } from './cryptography/cryptography.module';
-import { RolesGuard } from './acls/roles.guard';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -26,6 +26,7 @@ import { RolesGuard } from './acls/roles.guard';
     AuthModule,
     ClientsModule,
     CryptographyModule,
+    MailModule,
   ],
   controllers: [AppController],
   providers: [
