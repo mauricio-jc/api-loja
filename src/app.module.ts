@@ -12,6 +12,7 @@ import { ClientsModule } from './clients/clients.module';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CryptographyModule } from './cryptography/cryptography.module';
 import { MailModule } from './mail/mail.module';
+import { NotificationsGateway } from './notifications.gateway';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { MailModule } from './mail/mail.module';
       provide: APP_INTERCEPTOR,
       useClass: ClassSerializerInterceptor,
     },
+    NotificationsGateway,
   ],
 })
 export class AppModule {}
