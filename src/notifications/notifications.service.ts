@@ -5,7 +5,7 @@ import { NotificationsGateway } from 'src/notifications.gateway';
 export class NotificationsService {
   constructor(private notificationsGateway: NotificationsGateway) {}
 
-  create(): void {
-    this.notificationsGateway.createNotification();
+  create(title: string, description: string): void {
+    this.notificationsGateway.createNotification(title, description);
   }
 }

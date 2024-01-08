@@ -1,4 +1,4 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
@@ -7,8 +7,8 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 export class NotificationsController {
   constructor(private notificationsService: NotificationsService) {}
 
-  @Get('create')
-  create(): void {
-    this.notificationsService.create();
+  @Post('create')
+  create(@Body() data: any): void {
+    this.notificationsService.create(data.title, data.description);
   }
 }

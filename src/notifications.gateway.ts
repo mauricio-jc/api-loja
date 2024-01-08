@@ -31,9 +31,10 @@ export class NotificationsGateway
   }
 
   @SubscribeMessage('notification')
-  async createNotification() {
+  async createNotification(title: string, description: string) {
     this.server.emit('notification', {
-      message: 'Teste de notificação',
+      title: title,
+      description: description,
     });
   }
 }
