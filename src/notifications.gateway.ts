@@ -2,8 +2,6 @@ import {
   WebSocketGateway,
   WebSocketServer,
   SubscribeMessage,
-  MessageBody,
-  ConnectedSocket,
   OnGatewayConnection,
   OnGatewayDisconnect,
 } from '@nestjs/websockets';
@@ -33,14 +31,9 @@ export class NotificationsGateway
   }
 
   @SubscribeMessage('notification')
-  async handleMessage(
-    @ConnectedSocket() client: Socket,
-    @MessageBody() payload: any,
-  ) {
-    console.log(payload);
-
-    this.server.to('test').emit('title', {
-      message: 'teste',
+  async createNotification() {
+    this.server.emit('notification', {
+      message: 'Teste de notificação',
     });
   }
 }

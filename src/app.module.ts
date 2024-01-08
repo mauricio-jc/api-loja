@@ -13,6 +13,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { CryptographyModule } from './cryptography/cryptography.module';
 import { MailModule } from './mail/mail.module';
 import { NotificationsGateway } from './notifications.gateway';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { NotificationsGateway } from './notifications.gateway';
     ClientsModule,
     CryptographyModule,
     MailModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [
