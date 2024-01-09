@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { Notification } from 'src/notifications/entities/notification.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -6,6 +7,7 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity({ name: 'users' })
@@ -34,6 +36,12 @@ export class User {
 
   @Column({ name: 'roles', type: 'json', nullable: false })
   roles: string[];
+
+  @OneToMany(
+    () => Notification,
+    (notification) => [notification.emitter, notification.receiver],
+  )
+  notification: Notification[];
 
   @CreateDateColumn({ name: 'created_at', nullable: true })
   createdAt: Date;
