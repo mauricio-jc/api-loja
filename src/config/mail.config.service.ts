@@ -8,13 +8,26 @@ export class MailConfigService implements MailerOptionsFactory {
 
   createMailerOptions(): MailerOptions | Promise<MailerOptions> {
     return {
+      // transport: {
+      //   host: this.configService?.get<string>('MAIL_HOST'),
+      //   secure: false,
+      //   port: this.configService?.get<number>('MAIL_PORT'),
+      //   auth: {
+      //     user: this.configService?.get<string>('MAIL_USERNAME'),
+      //     pass: this.configService?.get<string>('MAIL_PASSWORD'),
+      //   },
+      //   ignoreTLS: true,
+      // },
+      // defaults: {
+      //   from: '',
+      // },
       transport: {
-        host: this.configService?.get<string>('MAIL_HOST'),
+        host: process.env.MAIL_HOST,
         secure: false,
-        port: this.configService?.get<number>('MAIL_PORT'),
+        port: Number(process.env.MAIL_PORT),
         auth: {
-          user: this.configService?.get<string>('MAIL_USERNAME'),
-          pass: this.configService?.get<string>('MAIL_PASSWORD'),
+          user: process.env.MAIL_USERNAME,
+          pass: process.env.MAIL_PASSWORD,
         },
         ignoreTLS: true,
       },
