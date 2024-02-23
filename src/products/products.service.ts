@@ -1,5 +1,4 @@
 import {
-  HttpStatus,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -29,11 +28,7 @@ export class ProductsService {
         },
       });
     } catch (error) {
-      throw new InternalServerErrorException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Falha na requisição',
-        error: error.name,
-      });
+      throw new InternalServerErrorException();
     }
   }
 
@@ -43,19 +38,7 @@ export class ProductsService {
       if (!product) throw new NotFoundException();
       return product;
     } catch (error) {
-      if (error.response.statusCode == 404) {
-        throw new NotFoundException({
-          statusCode: HttpStatus.NOT_FOUND,
-          message: 'Produto não encontrado',
-          error: error.name,
-        });
-      }
-
-      throw new InternalServerErrorException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Falha na requisição',
-        error: error.name,
-      });
+      throw error;
     }
   }
 
@@ -84,11 +67,7 @@ export class ProductsService {
 
       return await this.productRepository.save(product);
     } catch (error) {
-      throw new InternalServerErrorException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Problemas ao cadastrar produto',
-        error: error,
-      });
+      throw new InternalServerErrorException();
     }
   }
 
@@ -151,11 +130,7 @@ export class ProductsService {
 
       return await this.productRepository.update(id, updateProduct);
     } catch (error) {
-      throw new InternalServerErrorException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Problemas ao atualizar produto',
-        error: error,
-      });
+      throw new InternalServerErrorException();
     }
   }
 
@@ -173,11 +148,7 @@ export class ProductsService {
 
       return await this.productRepository.delete(id);
     } catch (error) {
-      throw new InternalServerErrorException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Problemas ao excluir produto',
-        error: error,
-      });
+      throw new InternalServerErrorException();
     }
   }
 

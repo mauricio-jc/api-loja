@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  HttpStatus,
   Inject,
   Injectable,
   InternalServerErrorException,
@@ -30,11 +29,7 @@ export class CategoriesService {
         },
       });
     } catch (error) {
-      throw new InternalServerErrorException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Falha na requisição',
-        error: error.name,
-      });
+      throw new InternalServerErrorException();
     }
   }
 
@@ -44,19 +39,7 @@ export class CategoriesService {
       if (!category) throw new NotFoundException();
       return category;
     } catch (error) {
-      if (error.response.statusCode == 404) {
-        throw new NotFoundException({
-          statusCode: HttpStatus.NOT_FOUND,
-          message: 'Categoria não encontrada',
-          error: error.name,
-        });
-      }
-
-      throw new InternalServerErrorException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Falha na requisição',
-        error: error.name,
-      });
+      throw error;
     }
   }
 
@@ -74,11 +57,7 @@ export class CategoriesService {
 
       return true;
     } catch (error) {
-      throw new InternalServerErrorException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Problemas ao atualizar categoria',
-        error: error.name,
-      });
+      throw new InternalServerErrorException();
     }
   }
 
@@ -97,11 +76,7 @@ export class CategoriesService {
 
       return true;
     } catch (error) {
-      throw new InternalServerErrorException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Problemas ao atualizar categoria',
-        error: error.name,
-      });
+      throw new InternalServerErrorException();
     }
   }
 
@@ -113,19 +88,7 @@ export class CategoriesService {
 
       return await this.categoryRepository.save(createCategoryDto);
     } catch (error) {
-      if (error.response.statusCode == 400) {
-        throw new BadRequestException({
-          statusCode: HttpStatus.BAD_REQUEST,
-          message: 'Categoria já cadastrada no banco de dados',
-          error: error.name,
-        });
-      }
-
-      throw new InternalServerErrorException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Problemas ao cadastrar categoria',
-        error: error.name,
-      });
+      throw error;
     }
   }
 
@@ -140,19 +103,7 @@ export class CategoriesService {
 
       return await this.categoryRepository.update(id, createCategoryDto);
     } catch (error) {
-      if (error.response.statusCode == 400) {
-        throw new BadRequestException({
-          statusCode: HttpStatus.BAD_REQUEST,
-          message: 'Categoria já cadastrada no banco de dados',
-          error: error.name,
-        });
-      }
-
-      throw new InternalServerErrorException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Problemas ao editar a categoria',
-        error: error.message,
-      });
+      throw error;
     }
   }
 
@@ -166,20 +117,7 @@ export class CategoriesService {
         return await this.categoryRepository.delete(id);
       }
     } catch (error) {
-      if (error.response.statusCode == 400) {
-        throw new BadRequestException({
-          statusCode: HttpStatus.BAD_REQUEST,
-          message:
-            'Esta categoria não pode ser excluída pois está vinculada a um produto',
-          error: error.name,
-        });
-      }
-
-      throw new InternalServerErrorException({
-        statusCode: HttpStatus.INTERNAL_SERVER_ERROR,
-        message: 'Problemas ao excluir a categoria',
-        error: error.message,
-      });
+      throw error;
     }
   }
 }
