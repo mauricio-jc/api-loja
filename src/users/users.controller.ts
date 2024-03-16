@@ -16,7 +16,7 @@ import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get()
   async listAll(): Promise<User | any> {
     return this.usersService.all();
@@ -27,13 +27,13 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get('roles')
   async getRoles(@Request() request: any): Promise<any> {
     return await this.usersService.getRoles(request.user.id);
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get(':id')
   async find(@Param('id') id: string): Promise<User | any> {
     return this.usersService.findOneById(Number(id));

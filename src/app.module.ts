@@ -14,6 +14,7 @@ import { CryptographyModule } from './cryptography/cryptography.module';
 import { MailModule } from './mail/mail.module';
 import { NotificationsGateway } from './notifications.gateway';
 import { NotificationsModule } from './notifications/notifications.module';
+import { FormsModule } from './forms/forms.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     CryptographyModule,
     MailModule,
     NotificationsModule,
+    FormsModule,
   ],
   controllers: [AppController],
   providers: [

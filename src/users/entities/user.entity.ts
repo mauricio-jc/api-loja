@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { FormAdmin } from 'src/forms/entities/form_admin.entity';
 import { Notification } from 'src/notifications/entities/notification.entity';
 import {
   Entity,
@@ -42,6 +43,9 @@ export class User {
     (notification) => [notification.emitter, notification.receiver],
   )
   notification: Notification[];
+
+  @OneToMany(() => FormAdmin, (formAdmin) => formAdmin.user)
+  formAdmin: FormAdmin[];
 
   @CreateDateColumn({ name: 'created_at', nullable: true })
   createdAt: Date;
