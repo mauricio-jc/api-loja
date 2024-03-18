@@ -8,9 +8,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from './entities/category.entity';
-import { Not, Repository } from 'typeorm';
+import { Like, Not, Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { ProductsService } from 'src/products/products.service';
+import { FilterCategoryDto } from './dto/filter-category.dto';
 
 @Injectable()
 export class CategoriesService {
@@ -21,13 +22,35 @@ export class CategoriesService {
     private productsService: ProductsService,
   ) {}
 
-  async all(): Promise<Category[] | any> {
+  async all(filters?: FilterCategoryDto): Promise<Category[] | any> {
     try {
-      return await this.categoryRepository.find({
+      let where = {};
+
+      if (filters.name) {
+        where = {
+          name: Like(`%${filters.name}%`),
+        };
+      }
+
+      const [data, total] = await this.categoryRepository.findAndCount({
+        skip: (filters.page - 1) * filters.limit,
+        take: filters.limit,
+        where: where,
         order: {
           name: 'ASC',
         },
       });
+
+      return {
+        data: data,
+        count: total,
+        perPage: filters.limit,
+        currentPage: filters.page,
+        prevPage: filters.page - 1 === 0 ? null : filters.page - 1,
+        nextPage:
+          filters.page * filters.limit > total ? null : filters.page + 1,
+        lastPage: Math.ceil(total / filters.limit),
+      };
     } catch (error) {
       throw new InternalServerErrorException();
     }

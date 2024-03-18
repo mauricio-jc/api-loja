@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
@@ -15,6 +16,7 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { Actions } from '../acls/actions.decorator';
 import { Action } from 'src/acls/action.enum';
 import { RolesGuard } from 'src/acls/roles.guard';
+import { FilterCategoryDto } from './dto/filter-category.dto';
 
 @Controller('categories')
 @UseGuards(JwtAuthGuard, RolesGuard)
@@ -23,8 +25,10 @@ export class CategoriesController {
 
   @Get()
   @Actions(Action.ListCategories)
-  async listAll(): Promise<Category[] | any> {
-    return await this.categoriesService.all();
+  async listAll(
+    @Query() filters?: FilterCategoryDto,
+  ): Promise<Category[] | any> {
+    return await this.categoriesService.all(filters);
   }
 
   @Get(':id')
