@@ -12,6 +12,7 @@ import { Like, Not, Repository } from 'typeorm';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { ProductsService } from 'src/products/products.service';
 import { FilterCategoryDto } from './dto/filter-category.dto';
+import { Paginator } from 'src/commons/paginator.dto';
 
 @Injectable()
 export class CategoriesService {
@@ -41,16 +42,7 @@ export class CategoriesService {
         },
       });
 
-      return {
-        data: data,
-        count: total,
-        perPage: filters.limit,
-        currentPage: filters.page,
-        prevPage: filters.page - 1 === 0 ? null : filters.page - 1,
-        nextPage:
-          filters.page * filters.limit > total ? null : filters.page + 1,
-        lastPage: Math.ceil(total / filters.limit),
-      };
+      return new Paginator(data, total, filters);
     } catch (error) {
       throw new InternalServerErrorException();
     }
